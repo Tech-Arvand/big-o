@@ -1,135 +1,156 @@
-# Виды и примеры Big-O (Python)
+# Виды и примеры Big-O (JavaScript)
 ### [@Big-O на Golang](./README.md)
-### [@Big-O на JavaScript](./README_javascript.md)
+### [@Big-O на Python](./README_python.md.md)
 
 ## 1. $O(1)$ — Константная сложность
 Алгоритм выполняет одно и то же количество операций независимо от размера входных данных.
 
 Пример: доступ к элементу массива по индексу.
-```python
-def get_first_element(arr):
-    return arr[0]  # Одна операция, независимо от размера массива
+```javascript
+function getFirstElement(arr) {
+    return arr[0];  // Одна операция, независимо от размера массива
+}
 ```
 
 ## 2. $O(log\ n)$ — Логарифмическая сложность
 Алгоритм работает быстрее за счет уменьшения количества данных на каждом шаге, как, например, в бинарном поиске.
 
 Пример: бинарный поиск в отсортированном массиве.
-```python
-def binary_search(arr, target):
-    left, right = 0, len(arr) - 1
-    while left <= right:
-        mid = (left + right) // 2
-        if arr[mid] == target:
-            return True
-        elif arr[mid] < target:
-            left = mid + 1
-        else:
-            right = mid - 1
-    return False
+```javascript
+function binarySearch(arr, target) {
+    let left = 0, right = arr.length - 1;
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        if (arr[mid] === target) {
+            return true;
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return false;
+}
 ```
 
 ## 3. $O(n)$ — Линейная сложность
 Алгоритм выполняет количество операций, прямо пропорциональное размеру входных данных.
 
 Пример: поиск элемента в несортированном массиве.
-```python
-def find_element(arr, target):
-    for num in arr:
-        if num == target:
-            return True
-    return False
+```javascript
+function findElement(arr, target) {
+    for (let num of arr) {
+        if (num === target) {
+            return true;
+        }
+    }
+    return false;
+}
 ```
 
 ## 4. $O(n\log\ n)$ — Линейно-логарифмическая сложность
 Эта сложность характерна для многих алгоритмов сортировки, таких как быстрая сортировка или сортировка слиянием.
 
 Пример: сортировка слиянием.
-```python
-def merge_sort(arr):
-    if len(arr) <= 1:
-        return arr
-    mid = len(arr) // 2
-    left = merge_sort(arr[:mid])
-    right = merge_sort(arr[mid:])
-    return merge(left, right)
+```javascript
+function mergeSort(arr) {
+    if (arr.length <= 1) {
+        return arr;
+    }
+    const mid = Math.floor(arr.length / 2);
+    const left = mergeSort(arr.slice(0, mid));
+    const right = mergeSort(arr.slice(mid));
+    return merge(left, right);
+}
 
-def merge(left, right):
-    result = []
-    i = j = 0
-    while i < len(left) and j < len(right):
-        if left[i] < right[j]:
-            result.append(left[i])
-            i += 1
-        else:
-            result.append(right[j])
-            j += 1
-    result.extend(left[i:])
-    result.extend(right[j:])
-    return result
+function merge(left, right) {
+    const result = [];
+    let i = 0, j = 0;
+    while (i < left.length && j < right.length) {
+        if (left[i] < right[j]) {
+            result.push(left[i]);
+            i++;
+        } else {
+            result.push(right[j]);
+            j++;
+        }
+    }
+    return result.concat(left.slice(i)).concat(right.slice(j));
+}
 ```
 
 ## 5. $O(n^2)$ — Квадратичная сложность
 Количество операций увеличивается как квадрат от размера входных данных. Это происходит в алгоритмах с двумя вложенными циклами.
 
 Пример: сортировка пузырьком.
-```python
-def bubble_sort(arr):
-    for i in range(len(arr)):
-        for j in range(len(arr) - i - 1):
-            if arr[j] > arr[j + 1]:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+```javascript
+function bubbleSort(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr.length - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            }
+        }
+    }
+}
 ```
 
 ## 6. $O(2^n)$ — Экспоненциальная сложность
 Количество операций удваивается с каждым увеличением размера входных данных. Часто встречается в задачах, связанных с рекурсией.
 
 Пример: решение задачи о нахождении всех подмножеств (рекурсия).
-```python
-def subsets(arr):
-    res = []
-    backtrack(res, [], arr, 0)
-    return res
+```javascript
+function subsets(arr) {
+    const res = [];
+    backtrack(res, [], arr, 0);
+    return res;
+}
 
-def backtrack(res, temp, arr, start):
-    res.append(temp[:])
-    for i in range(start, len(arr)):
-        temp.append(arr[i])
-        backtrack(res, temp, arr, i + 1)
-        temp.pop()
+function backtrack(res, temp, arr, start) {
+    res.push([...temp]);
+    for (let i = start; i < arr.length; i++) {
+        temp.push(arr[i]);
+        backtrack(res, temp, arr, i + 1);
+        temp.pop();
+    }
+}
 ```
 
 ## 7. $O(n!)$ — Факториальная сложность
 Очень редкая сложность, возникает в задачах, где необходимо перебирать все возможные перестановки или комбинации.
 
 Пример: нахождение всех перестановок множества.
-```python
-def permute(arr):
-    res = []
-    backtrack_permute(res, arr, 0)
-    return res
+```javascript
+function permute(arr) {
+    const res = [];
+    backtrackPermute(res, arr, 0);
+    return res;
+}
 
-def backtrack_permute(res, arr, start):
-    if start == len(arr):
-        res.append(arr[:])
-    for i in range(start, len(arr)):
-        arr[start], arr[i] = arr[i], arr[start]
-        backtrack_permute(res, arr, start + 1)
-        arr[start], arr[i] = arr[i], arr[start]
+function backtrackPermute(res, arr, start) {
+    if (start === arr.length) {
+        res.push([...arr]);
+    }
+    for (let i = start; i < arr.length; i++) {
+        [arr[start], arr[i]] = [arr[i], arr[start]];
+        backtrackPermute(res, arr, start + 1);
+        [arr[start], arr[i]] = [arr[i], arr[start]];
+    }
+}
 ```
 
 ## 8. $O(√n)$ — Корневая сложность
 Алгоритм выполняет операции пропорционально квадратному корню от размера входных данных. Такая сложность встречается, например, при поиске делителей числа до его квадратного корня.
 
 Пример: проверка числа на простоту через делители до $√n$.
-```python
-def is_prime(n):
-    if n <= 1:
-        return False
-    for i in range(2, int(n**0.5) + 1):
-        if n % i == 0:
-            return False
-    return True
+```javascript
+function isPrime(n) {
+    if (n <= 1) return false;
+    for (let i = 2; i * i <= n; i++) {
+        if (n % i === 0) return false;
+    }
+    return true;
+}
 ```
 
 ## 9. $O(log^2\ n)$ — Логарифм в квадрате
@@ -138,39 +159,39 @@ def is_prime(n):
 Пример: Двойной бинарный поиск
 Предположим, что у нас есть двумерный массив, отсортированный по строкам и столбцам, и мы хотим найти элемент. Здесь мы используем бинарный поиск сначала по строкам, затем по столбцам, что приводит к сложности $O(log\ n * log\ n)$ = $O(log^2\ n)$.
 
-```python
-# Двойной бинарный поиск
-def binary_search_2d(matrix, target):
-    rows = len(matrix)
-    if rows == 0:
-        return False
-    cols = len(matrix[0])
+```javascript
+// Двойной бинарный поиск
+function binarySearch2D(matrix, target) {
+    const rows = matrix.length;
+    if (rows === 0) return false;
+    const cols = matrix[0].length;
 
-    # Бинарный поиск по строкам
-    start, end = 0, rows - 1
-    while start <= end:
-        mid = (start + end) // 2
-        if matrix[mid][0] <= target <= matrix[mid][cols - 1]:
-            # Если target в пределах строки, выполняем бинарный поиск по этой строке
-            return binary_search(matrix[mid], target)
-        elif matrix[mid][0] > target:
-            end = mid - 1
-        else:
-            start = mid + 1
-    return False
+    let start = 0, end = rows - 1;
+    while (start <= end) {
+        const mid = Math.floor((start + end) / 2);
+        if (matrix[mid][0] <= target && target <= matrix[mid][cols - 1]) {
+            return binarySearch(matrix[mid], target);
+        } else if (matrix[mid][0] > target) {
+            end = mid - 1;
+        } else {
+            start = mid + 1;
+        }
+    }
+    return false;
+}
 
-# Обычный бинарный поиск в одномерном массиве
-def binary_search(arr, target):
-    start, end = 0, len(arr) - 1
-    while start <= end:
-        mid = (start + end) // 2
-        if arr[mid] == target:
-            return True
-        elif arr[mid] < target:
-            start = mid + 1
-        else:
-            end = mid - 1
-    return False
+
+// Обычный бинарный поиск в одномерном массиве
+function binarySearch(arr, target) {
+    let start = 0, end = arr.length - 1;
+    while (start <= end) {
+        const mid = Math.floor((start + end) / 2);
+        if (arr[mid] === target) return true;
+        else if (arr[mid] < target) start = mid + 1;
+        else end = mid - 1;
+    }
+    return false;
+}
 ```
 ### Объяснение:
 Мы сначала делим двумерный массив на строки, выполняя бинарный поиск по строкам.
@@ -181,53 +202,58 @@ def binary_search(arr, target):
 Этот тип сложности возникает в задачах, связанных с матрицами или графами, когда требуется перебрать все пары и для каждой пары выполнить дополнительную работу.
 
 Пример: алгоритм Флойда-Уоршелла для нахождения всех кратчайших путей в графе.
-```python
-def floyd_warshall(graph):
-    dist = [row[:] for row in graph]
-    for k in range(len(graph)):
-        for i in range(len(graph)):
-            for j in range(len(graph)):
-                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
-    return dist
+```javascript
+function floydWarshall(graph) {
+    const dist = graph.map(row => [...row]);
+    for (let k = 0; k < graph.length; k++) {
+        for (let i = 0; i < graph.length; i++) {
+            for (let j = 0; j < graph.length; j++) {
+                dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+            }
+        }
+    }
+    return dist;
+}
 ```
 
 ## 11. $O(3^n)$ — Экспоненциальная сложность с базой 3
 Такой тип сложности появляется в задачах, где каждое решение имеет три варианта развития, например, при работе с деревьями решений.
 
 Пример: рекурсия с тремя ветвями.
-```python
+```javascript
 # Рекурсивное разветвление на три варианта, пример решения с трёхвариантной рекурсией
-def three_way_recursion(n):
-    if n == 0:
-        return 1
-    return three_way_recursion(n - 1) + three_way_recursion(n - 2) + three_way_recursion(n - 3)
+function threeWayRecursion(n) {
+    if (n === 0) return 1;
+    return threeWayRecursion(n - 1) + threeWayRecursion(n - 2) + threeWayRecursion(n - 3);
+}
 ```
 
 ## 12. $O(\frac{2^n}{log\ n})$ — Экспоненциальная сложность с логарифмическим делителем
 Такую сложность можно встретить в сложных задачах оптимизации или сжатия данных, где экспоненциальное разрастание замедляется за счет деления на логарифм.  Примеры для сложности $O(\frac{2^n}{log\ n})$ встречается крайне редко, так как это очень специфическая сложность. Она возникает в задачах, где мы имеем экспоненциальное разрастание вариантов, но на каждом шаге количество операций уменьшается за счёт логарифмического фактора. Один из вариантов, где можно увидеть такую сложность, — это задачи, связанные с комбинаторикой или оптимизацией, где мы можем применять технику разветвления решений, а затем на каждом шаге сокращать варианты.
 
 Пример: задачи, где разрастание комбинируется с уменьшением на каждом шаге.
-```python
-# Пример задачи, где увеличение вариантов замедляется за счет логарифма
-# Подобная структура может быть при решении задач с оптимизацией
-# Функция для генерации всех подмножеств с оптимизацией
-import math
+```javascript
+// Пример задачи, где увеличение вариантов замедляется за счет логарифма
+// Подобная структура может быть при решении задач с оптимизацией
+// Функция для генерации всех подмножеств с оптимизацией
+function generateSubsetsOptimized(arr, target) {
+    const res = [];
+    const limit = Math.pow(2, arr.length);  // количество возможных подмножеств = 2^n
 
-def generate_subsets_optimized(arr, target):
-    res = []
-    limit = int(math.pow(2, len(arr)))  # количество возможных подмножеств = 2^n
-
-    for i in range(limit):
-        subset = []
-        sum_val = 0
-        for j in range(len(arr)):
-            if (i >> j) & 1:
-                subset.append(arr[j])
-                sum_val += arr[j]
-        if sum_val > target:
-            continue
-        res.append(subset)
-    return res
+    for (let i = 0; i < limit; i++) {
+        const subset = [];
+        let sum = 0;
+        for (let j = 0; j < arr.length; j++) {
+            if ((i >> j) & 1) {
+                subset.push(arr[j]);
+                sum += arr[j];
+            }
+        }
+        if (sum > target) continue;
+        res.push(subset);
+    }
+    return res;
+}
 ```
 ### Объяснение:
 Мы генерируем все подмножества массива, используя битовые операции. Это стандартная экспоненциальная операция с $2^n$ вариантами.
