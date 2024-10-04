@@ -1,161 +1,134 @@
-# @ Виды и примеры Big O (Golang)
+# @ Виды и примеры Big O (Python)
 
 ## 1. $O(1)$ — Константная сложность
 Алгоритм выполняет одно и то же количество операций независимо от размера входных данных.
 
 Пример: доступ к элементу массива по индексу.
-```go
-func getFirstElement(arr []int) int {
-    return arr[0]  // Одна операция, независимо от размера массива
-}
+```python
+def get_first_element(arr):
+    return arr[0]  # Одна операция, независимо от размера массива
 ```
 
 ## 2. $O(log\ n)$ — Логарифмическая сложность
 Алгоритм работает быстрее за счет уменьшения количества данных на каждом шаге, как, например, в бинарном поиске.
 
 Пример: бинарный поиск в отсортированном массиве.
-```go
-func binarySearch(arr []int, target int) bool {
-    left, right := 0, len(arr)-1
-    for left <= right {
-        mid := (left + right) / 2
-        if arr[mid] == target {
-            return true
-        } else if arr[mid] < target {
+```python
+def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return True
+        elif arr[mid] < target:
             left = mid + 1
-        } else {
+        else:
             right = mid - 1
-        }
-    }
-    return false
-}
+    return False
 ```
 
 ## 3. $O(n)$ — Линейная сложность
 Алгоритм выполняет количество операций, прямо пропорциональное размеру входных данных.
 
 Пример: поиск элемента в несортированном массиве.
-```go
-func findElement(arr []int, target int) bool {
-    for _, num := range arr {
-        if num == target {
-            return true
-        }
-    }
-    return false
-}
+```python
+def find_element(arr, target):
+    for num in arr:
+        if num == target:
+            return True
+    return False
 ```
 
 ## 4. $O(n\log\ n)$ — Линейно-логарифмическая сложность
 Эта сложность характерна для многих алгоритмов сортировки, таких как быстрая сортировка или сортировка слиянием.
 
 Пример: сортировка слиянием.
-```go
-func mergeSort(arr []int) []int {
-    if len(arr) <= 1 {
+```python
+def merge_sort(arr):
+    if len(arr) <= 1:
         return arr
-    }
-    mid := len(arr) / 2
-    left := mergeSort(arr[:mid])
-    right := mergeSort(arr[mid:])
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
     return merge(left, right)
-}
 
-func merge(left, right []int) []int {
-    result := []int{}
-    i, j := 0, 0
-    for i < len(left) && j < len(right) {
-        if left[i] < right[j] {
-            result = append(result, left[i])
-            i++
-        } else {
-            result = append(result, right[j])
-            j++
-        }
-    }
-    result = append(result, left[i:]...)
-    result = append(result, right[j:]...)
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
     return result
-}
 ```
 
 ## 5. $O(n^2)$ — Квадратичная сложность
 Количество операций увеличивается как квадрат от размера входных данных. Это происходит в алгоритмах с двумя вложенными циклами.
 
 Пример: сортировка пузырьком.
-```go
-func bubbleSort(arr []int) {
-    for i := 0; i < len(arr); i++ {
-        for j := 0; j < len(arr)-i-1; j++ {
-            if arr[j] > arr[j+1] {
-                arr[j], arr[j+1] = arr[j+1], arr[j]
-            }
-        }
-    }
-}
+```python
+def bubble_sort(arr):
+    for i in range(len(arr)):
+        for j in range(len(arr) - i - 1):
+            if arr[j] > arr[j + 1]:
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
 ```
 
 ## 6. $O(2^n)$ — Экспоненциальная сложность
 Количество операций удваивается с каждым увеличением размера входных данных. Часто встречается в задачах, связанных с рекурсией.
 
 Пример: решение задачи о нахождении всех подмножеств (рекурсия).
-```go
-func subsets(arr []int) [][]int {
-    res := [][]int{}
-    backtrack(&res, []int{}, arr, 0)
+```python
+def subsets(arr):
+    res = []
+    backtrack(res, [], arr, 0)
     return res
-}
 
-func backtrack(res *[][]int, temp, arr []int, start int) {
-    *res = append(*res, append([]int{}, temp...))
-    for i := start; i < len(arr); i++ {
-        temp = append(temp, arr[i])
-        backtrack(res, temp, arr, i+1)
-        temp = temp[:len(temp)-1]
-    }
-}
+def backtrack(res, temp, arr, start):
+    res.append(temp[:])
+    for i in range(start, len(arr)):
+        temp.append(arr[i])
+        backtrack(res, temp, arr, i + 1)
+        temp.pop()
+
 ```
 
 ## 7. $O(n!)$ — Факториальная сложность
 Очень редкая сложность, возникает в задачах, где необходимо перебирать все возможные перестановки или комбинации.
 
 Пример: нахождение всех перестановок множества.
-```go
-func permute(arr []int) [][]int {
-    res := [][]int{}
-    backtrackPermute(&res, arr, 0)
+```python
+def permute(arr):
+    res = []
+    backtrack_permute(res, arr, 0)
     return res
-}
 
-func backtrackPermute(res *[][]int, arr []int, start int) {
-    if start == len(arr) {
-        *res = append(*res, append([]int{}, arr...))
-        return
-    }
-    for i := start; i < len(arr); i++ {
+def backtrack_permute(res, arr, start):
+    if start == len(arr):
+        res.append(arr[:])
+    for i in range(start, len(arr)):
         arr[start], arr[i] = arr[i], arr[start]
-        backtrackPermute(res, arr, start+1)
+        backtrack_permute(res, arr, start + 1)
         arr[start], arr[i] = arr[i], arr[start]
-    }
-}
 ```
 
 ## 8. $O(√n)$ — Корневая сложность
 Алгоритм выполняет операции пропорционально квадратному корню от размера входных данных. Такая сложность встречается, например, при поиске делителей числа до его квадратного корня.
 
 Пример: проверка числа на простоту через делители до $√n$.
-```go
-func isPrime(n int) bool {
-    if n <= 1 {
-        return false
-    }
-    for i := 2; i*i <= n; i++ {
-        if n%i == 0 {
-            return false
-        }
-    }
-    return true
-}
+```python
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
 ```
 
 ## 9. $O(log^2\ n)$ — Логарифм в квадрате
@@ -164,47 +137,39 @@ func isPrime(n int) bool {
 Пример: Двойной бинарный поиск
 Предположим, что у нас есть двумерный массив, отсортированный по строкам и столбцам, и мы хотим найти элемент. Здесь мы используем бинарный поиск сначала по строкам, затем по столбцам, что приводит к сложности $O(log\ n * log\ n)$ = $O(log^2\ n)$.
 
-```go
-// Двойной бинарный поиск
-func binarySearch2D(matrix [][]int, target int) bool {
-	rows := len(matrix)
-	if rows == 0 {
-		return false
-	}
-	cols := len(matrix[0])
+```python
+# Двойной бинарный поиск
+def binary_search_2d(matrix, target):
+    rows = len(matrix)
+    if rows == 0:
+        return False
+    cols = len(matrix[0])
 
-	// Выполняем бинарный поиск по строкам
-	start, end := 0, rows-1
-	for start <= end {
-		mid := (start + end) / 2
-		if matrix[mid][0] <= target && target <= matrix[mid][cols-1] {
-			// Если target в пределах строки, выполняем бинарный поиск по этой строке
-			return binarySearch(matrix[mid], target)
-		} else if matrix[mid][0] > target {
-			end = mid - 1
-		} else {
-			start = mid + 1
-		}
-	}
+    # Бинарный поиск по строкам
+    start, end = 0, rows - 1
+    while start <= end:
+        mid = (start + end) // 2
+        if matrix[mid][0] <= target <= matrix[mid][cols - 1]:
+            # Если target в пределах строки, выполняем бинарный поиск по этой строке
+            return binary_search(matrix[mid], target)
+        elif matrix[mid][0] > target:
+            end = mid - 1
+        else:
+            start = mid + 1
+    return False
 
-	return false
-}
-
-// Обычный бинарный поиск в одномерном массиве
-func binarySearch(arr []int, target int) bool {
-	start, end := 0, len(arr)-1
-	for start <= end {
-		mid := (start + end) / 2
-		if arr[mid] == target {
-			return true
-		} else if arr[mid] < target {
-			start = mid + 1
-		} else {
-			end = mid - 1
-		}
-	}
-	return false
-}
+# Обычный бинарный поиск в одномерном массиве
+def binary_search(arr, target):
+    start, end = 0, len(arr) - 1
+    while start <= end:
+        mid = (start + end) // 2
+        if arr[mid] == target:
+            return True
+        elif arr[mid] < target:
+            start = mid + 1
+        else:
+            end = mid - 1
+    return False
 ```
 ### Объяснение:
 Мы сначала делим двумерный массив на строки, выполняя бинарный поиск по строкам.
@@ -215,72 +180,53 @@ func binarySearch(arr []int, target int) bool {
 Этот тип сложности возникает в задачах, связанных с матрицами или графами, когда требуется перебрать все пары и для каждой пары выполнить дополнительную работу.
 
 Пример: алгоритм Флойда-Уоршелла для нахождения всех кратчайших путей в графе.
-```go
-func floydWarshall(graph [][]int) [][]int {
-    dist := make([][]int, len(graph))
-    for i := range graph {
-        dist[i] = make([]int, len(graph[i]))
-        copy(dist[i], graph[i])
-    }
-
-    for k := 0; k < len(graph); k++ {
-        for i := 0; i < len(graph); i++ {
-            for j := 0; j < len(graph); j++ {
-                if dist[i][k] + dist[k][j] < dist[i][j] {
-                    dist[i][j] = dist[i][k] + dist[k][j]
-                }
-            }
-        }
-    }
-
+```python
+def floyd_warshall(graph):
+    dist = [row[:] for row in graph]
+    for k in range(len(graph)):
+        for i in range(len(graph)):
+            for j in range(len(graph)):
+                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
     return dist
-}
 ```
 
 ## 11. $O(3^n)$ — Экспоненциальная сложность с базой 3
 Такой тип сложности появляется в задачах, где каждое решение имеет три варианта развития, например, при работе с деревьями решений.
 
 Пример: рекурсия с тремя ветвями.
-```go
-// Рекурсивное разветвление на три варианта, пример решения с трёхвариантной рекурсией
-func threeWayRecursion(n int) int {
-    if n == 0 {
+```python
+# Рекурсивное разветвление на три варианта, пример решения с трёхвариантной рекурсией
+def three_way_recursion(n):
+    if n == 0:
         return 1
-    }
-    return threeWayRecursion(n-1) + threeWayRecursion(n-2) + threeWayRecursion(n-3)
-}
+    return three_way_recursion(n - 1) + three_way_recursion(n - 2) + three_way_recursion(n - 3)
 ```
 
 ## 12. $O(\frac{2^n}{log\ n})$ — Экспоненциальная сложность с логарифмическим делителем
 Такую сложность можно встретить в сложных задачах оптимизации или сжатия данных, где экспоненциальное разрастание замедляется за счет деления на логарифм.  Примеры для сложности $O(\frac{2^n}{log\ n})$ встречается крайне редко, так как это очень специфическая сложность. Она возникает в задачах, где мы имеем экспоненциальное разрастание вариантов, но на каждом шаге количество операций уменьшается за счёт логарифмического фактора. Один из вариантов, где можно увидеть такую сложность, — это задачи, связанные с комбинаторикой или оптимизацией, где мы можем применять технику разветвления решений, а затем на каждом шаге сокращать варианты.
 
 Пример: задачи, где разрастание комбинируется с уменьшением на каждом шаге.
-```go
-// Пример задачи, где увеличение вариантов замедляется за счет логарифма
-// Подобная структура может быть при решении задач с оптимизацией
-// Функция для генерации всех подмножеств с оптимизацией
-func generateSubsetsOptimized(arr []int, target int) [][]int {
-	res := [][]int{}
-	limit := int(math.Pow(2, float64(len(arr)))) // количество возможных подмножеств = 2^n
+```python
+# Пример задачи, где увеличение вариантов замедляется за счет логарифма
+# Подобная структура может быть при решении задач с оптимизацией
+# Функция для генерации всех подмножеств с оптимизацией
+import math
 
-	for i := 0; i < limit; i++ {
-		subset := []int{}
-		sum := 0
-		for j := 0; j < len(arr); j++ {
-			// Проверяем, включен ли j-й элемент в подмножество
-			if (i>>j)&1 == 1 {
-				subset = append(subset, arr[j])
-				sum += arr[j]
-			}
-		}
-		// Применяем оптимизацию: если сумма подмножества уже превышает target, игнорируем его
-		if sum > target {
-			continue
-		}
-		res = append(res, subset)
-	}
-	return res
-}
+def generate_subsets_optimized(arr, target):
+    res = []
+    limit = int(math.pow(2, len(arr)))  # количество возможных подмножеств = 2^n
+
+    for i in range(limit):
+        subset = []
+        sum_val = 0
+        for j in range(len(arr)):
+            if (i >> j) & 1:
+                subset.append(arr[j])
+                sum_val += arr[j]
+        if sum_val > target:
+            continue
+        res.append(subset)
+    return res
 ```
 ### Объяснение:
 Мы генерируем все подмножества массива, используя битовые операции. Это стандартная экспоненциальная операция с $2^n$ вариантами.
